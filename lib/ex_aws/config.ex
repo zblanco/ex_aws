@@ -40,8 +40,8 @@ defmodule ExAws.Config do
   end
 
   def build_base(service, overrides \\ %{}) do
-    common_config = Application.get_all_env(:ex_aws) |> Map.new() |> Map.take(@common_config)
-    service_config = Application.get_env(:ex_aws, service, []) |> Map.new()
+    common_config = Application.get_all_env(:ex_aws) |> Map.new() |> Map.take(@common_config) |> IO.inspect(label: "common_config")
+    service_config = Application.get_env(:ex_aws, service, []) |> Map.new() |> IO.inspect(label: "service_config")
 
     region =
       (Map.get(overrides, :region) ||
@@ -50,12 +50,15 @@ defmodule ExAws.Config do
          "us-east-1")
       |> retrieve_runtime_value(%{})
 
-    defaults = ExAws.Config.Defaults.get(service, region)
+    defaults = ExAws.Config.Defaults.get(service, region) |> IO.inspect(label: "defaults")
 
     defaults
     |> Map.merge(common_config)
+    |> IO.inspect(label: "defaults + common config merged")
     |> Map.merge(service_config)
+    |> IO.inspect(label: "defaults + common + service config merged")
     |> Map.merge(overrides)
+    |> IO.inspect(label: "build_base/2 config return")
   end
 
   def retrieve_runtime_config(config) do
