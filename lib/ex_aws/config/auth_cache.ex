@@ -113,6 +113,7 @@ defmodule ExAws.Config.AuthCache do
   defp refresh_auth_if_stale(_, config, ets), do: refresh_auth_now(config, ets)
 
   defp refresh_auth_now(config, ets) do
+    IO.inspect(config, label: "AuthCache.refresh_auth_now/2 config")
     auth = ExAws.InstanceMeta.security_credentials(config)
     :ets.insert(ets, {@instance_auth_key, auth})
     Process.send_after(__MODULE__, {:refresh_auth, config}, next_refresh_in(auth))

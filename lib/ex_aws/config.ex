@@ -33,7 +33,9 @@ defmodule ExAws.Config do
 
     service
     |> build_base(overrides)
+    |> IO.inspect(label: "build_base config")
     |> retrieve_runtime_config
+    |> IO.inspect(label: "retrieve_runtime_config config")
     |> parse_host_for_region
   end
 
@@ -81,6 +83,7 @@ defmodule ExAws.Config do
 
   def retrieve_runtime_value(:instance_role, config) do
     config
+    |> IO.inspect(label: "retrieve_runtime_value instance role config")
     |> ExAws.Config.AuthCache.get()
     |> Map.take([:access_key_id, :secret_access_key, :security_token])
     |> valid_map_or_nil
